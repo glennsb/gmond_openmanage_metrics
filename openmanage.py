@@ -32,7 +32,7 @@ def metric_init(params):
         'value_type': 'float',
         'units': 'Celsius',
         'slope': 'both',
-        'format': '%f',
+        'format': '%.1f',
         'description': 'System board ambient temperature probe',
         'groups': 'hardware'}
 
