@@ -18,4 +18,12 @@ collection_group {
     name = "System_Board_Ambient"
     title = "System Board Ambient Temperature"
   }
+  metric {
+    name = "System_Board_Consumption"
+    title = "System Board Watt Consumption Level"
+  }
+  metric {
+    name = "PS_1_Amp"
+    title = "Power Supply 1 Amperage"
+  }
 }

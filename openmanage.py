@@ -73,7 +73,8 @@ def metric_init(params):
         'description': 'Power Supply 1 Amperage',
         'groups': 'hardware'}
 
-    descriptors = [d1,d2]
+    descriptors = [d1,d2,d3]
+    
     return descriptors
 
 def metric_cleanup():
