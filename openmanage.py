@@ -6,6 +6,14 @@ descriptors = list()
 om_path = "/opt/dell/srvadmin/bin/omreport"
 ambient_index = "0"
 
+def PS_1_Amp(name):
+    global om_path
+    p1 = subprocess.Popen([om_path,"chassis","pwrmonitoring"],stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(["grep","PS 1 Current"],stdin=p1.stdout,stdout=subprocess.PIPE)
+    p3 = subprocess.Popen(["awk","{print $6}"],stdin=p2.stdout,stdout=subprocess.PIPE)
+    amp = (p3.communicate()[0]).rstrip(os.linesep)
+    return float(amp)
+
 def System_Board_Consumption(name):
     global om_path
     p1 = subprocess.Popen([om_path,"chassis","pwrmonitoring"],stdout=subprocess.PIPE)
@@ -53,6 +61,16 @@ def metric_init(params):
         'slope': 'both',
         'format': '%.1f',
         'description': 'System board system power consumption level',
+        'groups': 'hardware'}
+
+    d3 = {'name': 'PS_1_Amp',
+        'call_back': PS_1_Amp,
+        'time_max': 90,
+        'value_type': 'float',
+        'units': 'Amp',
+        'slope': 'both',
+        'format': '%.1f',
+        'description': 'Power Supply 1 Amperage',
         'groups': 'hardware'}
 
     descriptors = [d1,d2]
