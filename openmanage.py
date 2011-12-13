@@ -6,9 +6,18 @@ descriptors = list()
 om_path = "/opt/dell/srvadmin/bin/omreport"
 ambient_index = "0"
 
-def System_Board_Ambient(name):
+def System_Board_Consumption(name):
     global om_path
     global ambient_index
+    p1 = subprocess.Popen([om_path,"chassis","temps","pwrmonitoring"],stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(["grep","Reading"],stdin=p1.stdout,stdout=subprocess.PIPE)
+    p3 = subprocess.Popen(["head","-n","1"],stdin=p2.stdout,stdout=subprocess.PIPE)
+    p4 = subprocess.Popen(["awk","{print $3}"],stdin=p3.stdout,stdout=subprocess.PIPE)
+    temp = (p4.communicate()[0]).rstrip(os.linesep)
+    return float(temp)
+    
+def System_Board_Ambient(name):
+    global om_path
     p1 = subprocess.Popen([om_path,"chassis","temps","Index="+ambient_index],stdout=subprocess.PIPE)
     p2 = subprocess.Popen(["grep","Reading"],stdin=p1.stdout,stdout=subprocess.PIPE)
     p3 = subprocess.Popen(["awk","{print $3}"],stdin=p2.stdout,stdout=subprocess.PIPE)
@@ -36,7 +45,17 @@ def metric_init(params):
         'description': 'System board ambient temperature probe',
         'groups': 'hardware'}
 
-    descriptors = [d1]
+    d2 = {'name': 'System_Board_Consumption',
+        'call_back': System_Board_Consumption,
+        'time_max': 90,
+        'value_type': 'float',
+        'units': 'Watt',
+        'slope': 'both',
+        'format': '%.1f',
+        'description': 'System board system power consumption level',
+        'groups': 'hardware'}
+
+    descriptors = [d1,d2]
     return descriptors
 
 def metric_cleanup():
