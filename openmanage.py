@@ -69,7 +69,7 @@ def metric_init(params):
         'value_type': 'float',
         'units': 'Amp',
         'slope': 'both',
-        'format': '%.1f',
+        'format': '%.2f',
         'description': 'Power Supply 1 Amperage',
         'groups': 'hardware'}
 
@@ -88,4 +88,4 @@ if __name__ == '__main__':
     metric_init(params)
     for d in descriptors:
         v = d['call_back'](d['name'])
-        print 'value for %s is %u' % (d['name'],  v)
+        print 'value for %s is %f' % (d['name'],  v)
