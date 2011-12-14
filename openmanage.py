@@ -10,8 +10,9 @@ def PS_1_Amp(name):
     global om_path
     p1 = subprocess.Popen([om_path,"chassis","pwrmonitoring"],stdout=subprocess.PIPE)
     p2 = subprocess.Popen(["grep","PS 1 Current"],stdin=p1.stdout,stdout=subprocess.PIPE)
-    p3 = subprocess.Popen(["awk","{print $6}"],stdin=p2.stdout,stdout=subprocess.PIPE)
-    amp = (p3.communicate()[0]).rstrip(os.linesep)
+    p3 = subprocess.Popen(["awk","-F",":","{print $2}"],stdin=p2.stdout,stdout=subprocess.PIPE)
+    p4 = subprocess.Popen(["awk","{print $1}"],stdin=p3.stdout,stdout=subprocess.PIPE)
+    amp = (p4.communicate()[0]).rstrip(os.linesep)
     return float(amp)
 
 def System_Board_Consumption(name):
